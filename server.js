@@ -77,14 +77,15 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 
 app.post("/check", async (req, res) => {
     try {
-        const params = {
-            FunctionName: "testFunction",
-            InvocationType: "RequestResponse",
-            Payload: JSON.stringify({ file: "20221107_093624.mp4" }),
-        };
-        const response = await lambdaClient.send(new InvokeCommand(params));
-        console.log(JSON.parse(response))
-        res.send(JSON.parse(response))
+        // const params = {
+        //     FunctionName: "testFunction",
+        //     InvocationType: "RequestResponse",
+        //     Payload: JSON.stringify({ file: "20221107_093624.mp4" }),
+        // };
+        // const response = await lambdaClient.send(new InvokeCommand(params));
+        // console.log(JSON.parse(response))
+        // res.send(JSON.parse(response))
+        req.send("Hello from AWS")
     } catch (e) {
         console.log(e);
         res.status(500).send("Something went wrong!");
