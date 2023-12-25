@@ -4,7 +4,7 @@ const { S3Client, PutObjectCommand,  } = require("@aws-sdk/client-s3");
 const { LambdaClient, InvokeCommand, InvokeAsyncCommand } = require("@aws-sdk/client-lambda");
 
 const app = express();
-const port = 80;
+const port = 3000;
 
 // Configure AWS S3 credentials (replace with your credentials)
 const s3Client = new S3Client({
