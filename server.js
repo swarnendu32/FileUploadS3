@@ -6,6 +6,8 @@ const { S3Client, PutObjectCommand,  } = require("@aws-sdk/client-s3");
 const app = express();
 const port = 3000;
 
+app.use((req, res, next) => {console.log("Start Time", new Date().toLocaleTimeString()); next()})
+
 // Configure AWS S3 credentials (replace with your credentials)
 const s3Client = new S3Client({
     region: "us-east-1",
@@ -60,7 +62,9 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         if (!file.originalname.endsWith(".mp4")) {
             return res.status(400).send("Only MP4 files are allowed");
         }
+        console.log("Server Upload Time", new Date().toLocaleTimeString())
         await uploadToS3(file);
+        console.log("Bucket Upload Time", new Date().toLocaleTimeString())
         // const params = {
         //     FunctionName: "testFunction",
         //     InvocationType: "RequestResponse",
