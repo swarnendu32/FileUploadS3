@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { S3Client, PutObjectCommand,  } = require("@aws-sdk/client-s3");
-const { LambdaClient, InvokeCommand, InvokeAsyncCommand } = require("@aws-sdk/client-lambda");
+// const { LambdaClient, InvokeCommand, InvokeAsyncCommand } = require("@aws-sdk/client-lambda");
 
 const app = express();
 const port = 3000;
@@ -15,13 +15,13 @@ const s3Client = new S3Client({
     },
 });
 
-const lambdaClient = new LambdaClient({
-    region: "us-east-1",
-    credentials: {
-        accessKeyId: "AKIAUZO7XDANW5NIONV6",
-        secretAccessKey: "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",
-    },
-});
+// const lambdaClient = new LambdaClient({
+//     region: "us-east-1",
+//     credentials: {
+//         accessKeyId: "AKIAUZO7XDANW5NIONV6",
+//         secretAccessKey: "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",
+//     },
+// });
 
 // Configure Multer for file uploads
 const upload = multer({
@@ -61,14 +61,14 @@ app.post("/upload", upload.single("file"), async (req, res) => {
             return res.status(400).send("Only MP4 files are allowed");
         }
         await uploadToS3(file);
-        const params = {
-            FunctionName: "testFunction",
-            InvocationType: "RequestResponse",
-            Payload: JSON.stringify({ file: file.originalname }),
-        };
-        const response = await lambdaClient.send(new InvokeCommand(params));
-        console.log(response)
-        res.send("Upload and Transcode successful!");
+        // const params = {
+        //     FunctionName: "testFunction",
+        //     InvocationType: "RequestResponse",
+        //     Payload: JSON.stringify({ file: file.originalname }),
+        // };
+        // const response = await lambdaClient.send(new InvokeCommand(params));
+        // console.log(response)
+        res.send("Upload successful!");
     } catch (error) {
         console.error(error);
         res.status(500).send("Error uploading file");
