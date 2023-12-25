@@ -85,7 +85,7 @@ app.post("/check", async (req, res) => {
         // const response = await lambdaClient.send(new InvokeCommand(params));
         // console.log(JSON.parse(response))
         // res.send(JSON.parse(response))
-        req.send("Hello from AWS")
+        res.send("Hello from AWS")
     } catch (e) {
         console.log(e);
         res.status(500).send("Something went wrong!");
