@@ -1,8 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path")
-const fs = require("fs")
-const {Upload} = require("@aws-sdk/lib-storage")
+const fs = require("fs");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 // const { LambdaClient, InvokeCommand, InvokeAsyncCommand } = require("@aws-sdk/client-lambda");
 
@@ -52,12 +50,11 @@ async function uploadToS3(file) {
             Key: file.originalname, // Use original filename
             Body: fs.createReadStream(file.path),
         };
-        const store = new Upload({client: s3Client, params: params})
-        await store.done()
+        await s3Client.send(new PutObjectCommand(params));
         console.log("File uploaded successfully!");
     } catch (error) {
         console.error("Error uploading file:", error);
-        throw error
+        throw error;
         // Handle errors appropriately, e.g., send error response to client
     }
 }
@@ -77,19 +74,12 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         console.log("Server Upload Time", new Date().toLocaleTimeString());
         await uploadToS3(file);
         console.log("Bucket Upload Time", new Date().toLocaleTimeString());
-        // const params = {
-        //     FunctionName: "testFunction",
-        //     InvocationType: "RequestResponse",
-        //     Payload: JSON.stringify({ file: file.originalname }),
-        // };
-        // const response = await lambdaClient.send(new InvokeCommand(params));
-        // console.log(response)
         res.send("Upload successful!");
     } catch (error) {
         console.error(error);
         res.status(500).send("Error uploading file");
     } finally {
-        fs.unlinkSync(req.file.path)
+        fs.unlinkSync(req.file.path);
     }
 });
 
